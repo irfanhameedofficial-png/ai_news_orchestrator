@@ -1,14 +1,14 @@
 # src/fetch/news_api.py
-import os
 import requests
-
-NEWSAPI_KEY = os.environ.get("NEWSAPI_KEY") or os.environ.get("NEWS_API_KEY")
+import streamlit as st
 
 def fetch_news(query: str, limit: int = 6):
     """
     Fetch articles from newsapi.org. Returns list of dicts:
     { headline, summary, url, published, source }
     """
+    NEWSAPI_KEY = st.secrets.get("NEWSAPI_KEY")
+
     if not NEWSAPI_KEY:
         raise RuntimeError("NEWSAPI_KEY is not set (set it in Streamlit secrets).")
 
@@ -18,8 +18,9 @@ def fetch_news(query: str, limit: int = 6):
         "pageSize": limit,
         "language": "en",
         "sortBy": "relevancy",
-        "apiKey": NEWSAPI_KEY
+        "apiKey": NEWSAPI_KEY,
     }
+
     resp = requests.get(url, params=params, timeout=15)
     resp.raise_for_status()
     payload = resp.json()
@@ -33,4 +34,5 @@ def fetch_news(query: str, limit: int = 6):
             "published": a.get("publishedAt") or "",
             "source": (a.get("source") or {}).get("name", "")
         })
+
     return articles
