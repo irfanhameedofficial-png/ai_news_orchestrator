@@ -1,17 +1,17 @@
 # src/fetch/news_api.py
 import requests
-import streamlit as st
+
+# Directly put your key here for testing only
+NEWSAPI_KEY = "aedd6ad241f240979c902501a73f70eb"
+
+if not NEWSAPI_KEY:
+    raise RuntimeError("NEWSAPI_KEY is not set!")
 
 def fetch_news(query: str, limit: int = 6):
     """
     Fetch articles from newsapi.org. Returns list of dicts:
     { headline, summary, url, published, source }
     """
-    NEWSAPI_KEY = st.secrets.get("NEWSAPI_KEY")
-
-    if not NEWSAPI_KEY:
-        raise RuntimeError("NEWSAPI_KEY is not set (set it in Streamlit secrets).")
-
     url = "https://newsapi.org/v2/everything"
     params = {
         "q": query,
