@@ -46,3 +46,7 @@ if st.button("Run"):
 
     st.subheader("Timeline & Summary")
     st.code(out)
+
+import streamlit as st
+
+st.write("Debug – NEWSAPI_KEY exists:", "NEWSAPI_KEY" in st.secrets)
